@@ -50,7 +50,7 @@ const recipeReducer = (state = initialState, action = {}) => {
         state.recipe.splice(selectedIndex, 1);
       }
 
-      return { ...state };
+      return { ...state, recipe: [...state.recipe] };
 
     default:
       return state;
