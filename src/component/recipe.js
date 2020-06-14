@@ -55,7 +55,7 @@ function Recipe({ navigation, route }) {
   return (
     <Container>
       <Header>
-        <Left>
+        <Left style={styles.headerSide}>
           <Button transparent onPress={() => navigation.goBack()}>
             <Icon name="arrow-back" />
           </Button>
@@ -63,7 +63,7 @@ function Recipe({ navigation, route }) {
         <Body>
           <Title>Recipe Details</Title>
         </Body>
-        <Right>
+        <Right style={styles.headerSide}>
           <Button
             transparent
             onPress={() =>
@@ -117,7 +117,8 @@ const styles = StyleSheet.create({
     padding: 15,
     borderRadius: 10
   },
-  detailsTitle: { fontSize: 18, fontWeight: 'bold', marginBottom: 10 }
+  detailsTitle: { fontSize: 18, fontWeight: 'bold', marginBottom: 10 },
+  headerSide: { flex: 1 }
 });
 
 export default Recipe;

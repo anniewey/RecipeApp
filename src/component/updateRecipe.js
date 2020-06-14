@@ -3,7 +3,7 @@
  * @flow
  */
 
-import { Alert, StyleSheet, View } from 'react-native';
+import { Alert, Platform, StyleSheet, View } from 'react-native';
 import {
   Body,
   Button,
@@ -22,8 +22,8 @@ import {
   Title
 } from 'native-base';
 import { useSelector, useDispatch } from 'react-redux';
-import RNFetchBlob from 'rn-fetch-blob';
 import ImagePicker from 'react-native-image-picker';
+import RNFetchBlob from 'rn-fetch-blob';
 import React, { useState, useEffect } from 'react';
 import XMLParser from 'react-xml-parser';
 
@@ -47,18 +47,19 @@ function UpdateRecipe({ navigation, route }) {
   const navData = route?.params?.data;
 
   useEffect(() => {
-    RNFetchBlob.fs
-      .readFile(RNFetchBlob.fs.dirs.MainBundleDir + '/assets/recipetypes.xml')
-      .then(res => {
-        // console.log('data', res);
-        const xml = new XMLParser().parseFromString(res); // parsing the xml content from data.xml
-        const xmlData = xml.getElementsByTagName('type');
-        // console.log(xmlData);
+    const path =
+      Platform.OS === 'ios'
+        ? RNFetchBlob.fs.dirs.MainBundleDir + '/assets/recipetypes.xml'
+        : RNFetchBlob.fs.asset('recipetypes.xml');
 
-        let xmlType = [];
-        xmlData.forEach(item => xmlType.push(item.value));
-        setType(xmlType);
-      });
+    RNFetchBlob.fs.readFile(path).then(res => {
+      const xml = new XMLParser().parseFromString(res); // parsing the xml content from data.xml
+      const xmlData = xml.getElementsByTagName('type');
+
+      let xmlType = [];
+      xmlData.forEach(item => xmlType.push(item.value));
+      setType(xmlType);
+    });
 
     if (navData) {
       setName(navData.name);
@@ -72,7 +73,7 @@ function UpdateRecipe({ navigation, route }) {
 
   const verifyField = () => {
     if (!name.trim() || !selectedType || !step.trim()) {
-      Alert.alert('Oops!', 'Please fill the required fields', 'OK');
+      Alert.alert('Oops!', 'Please fill the required fields');
       return false;
     }
     return true;
@@ -154,7 +155,7 @@ function UpdateRecipe({ navigation, route }) {
       }
     };
 
-    ImagePicker.showImagePicker(options, response => {
+    ImagePicker.launchImageLibrary(options, response => {
       console.log('Response = ', response);
 
       if (response.didCancel) {
@@ -178,15 +179,15 @@ function UpdateRecipe({ navigation, route }) {
   return (
     <Container>
       <Header>
-        <Left>
-          <Button transparent onPress={() => navigation.goBack()}>
-            <Text>Cancel</Text>
+        <Left style={styles.headerSide}>
+          <Button transparent onPress={() => navigation.goBack()} style={{}}>
+            <Icon name="arrow-back" />
           </Button>
         </Left>
         <Body>
           <Title>{route?.params?.data ? 'Update Recipe' : 'Add Recipe'}</Title>
         </Body>
-        <Right>
+        <Right style={styles.headerSide}>
           <Button
             transparent
             onPress={route?.params?.data ? onPressUpdate : onPressAdd}
@@ -231,7 +232,12 @@ function UpdateRecipe({ navigation, route }) {
                   >
                     {image ? image.name : 'Add Image'}
                   </Text>
-                  <Icon name="arrow-down" style={styles.placeholderText} />
+                  <Icon
+                    name={
+                      Platform.OS === 'ios' ? 'arrow-down' : 'md-arrow-dropdown'
+                    }
+                    style={styles.placeholderText}
+                  />
                 </View>
               </Button>
             </View>
@@ -289,7 +295,8 @@ const styles = StyleSheet.create({
     flexDirection: 'column'
   },
   multiInput: { marginBottom: 10, width: '100%', height: 150 },
-  multiInputLarge: { marginBottom: 10, width: '100%', height: 200 }
+  multiInputLarge: { marginBottom: 10, width: '100%', height: 200 },
+  headerSide: { flex: 1 }
 });
 
 export default UpdateRecipe;

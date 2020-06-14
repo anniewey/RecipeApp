@@ -118,11 +118,11 @@ function Home({ navigation }) {
   return (
     <Container>
       <Header>
-        <Left />
+        <Left style={styles.headerSide} />
         <Body>
           <Title>My Recipes</Title>
         </Body>
-        <Right>
+        <Right style={styles.headerSide}>
           <Button
             transparent
             onPress={() => navigation.navigate('UpdateRecipe')}
@@ -160,7 +160,8 @@ const styles = StyleSheet.create({
   filterView: { backgroundColor: '#EFEFEF' },
   listBody: { flex: 3 },
   listView: { justifyContent: 'space-between', flex: 0.5 },
-  listName: { fontSize: 18, fontWeight: 'bold' }
+  listName: { fontSize: 18, fontWeight: 'bold' },
+  headerSide: { flex: 1 }
 });
 
 export default Home;
