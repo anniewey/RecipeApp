@@ -44,10 +44,8 @@ function Home({ navigation }) {
           : RNFetchBlob.fs.asset('recipetypes.xml');
 
       RNFetchBlob.fs.readFile(path).then(res => {
-        // console.log('data', res);
         const xml = new XMLParser().parseFromString(res); // parsing the xml content from data.xml
         const xmlData = xml.getElementsByTagName('type');
-        // console.log(xmlData);
 
         let xmlType = [];
         xmlData.forEach(item => xmlType.push(item.value));
@@ -57,7 +55,6 @@ function Home({ navigation }) {
   });
 
   const onPickerValueChange = value => {
-    console.log('filter data', value);
     setSelectedType(value);
   };
 

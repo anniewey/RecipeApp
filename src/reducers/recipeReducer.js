@@ -38,7 +38,6 @@ const recipeReducer = (state = initialState, action = {}) => {
         selectedRecipe.step = action.data.step;
       }
 
-      console.log('//reducer', selectedRecipe, state);
       return { ...state };
 
     case 'DELETE_RECIPE':

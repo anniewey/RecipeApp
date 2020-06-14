@@ -157,7 +157,6 @@ function UpdateRecipe({ navigation, route }) {
 
     ImagePicker.launchImageLibrary(options, response => {
       console.log('Response = ', response);
-
       if (response.didCancel) {
         console.log('User cancelled image picker');
       } else if (response.error) {

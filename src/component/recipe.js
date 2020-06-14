@@ -37,7 +37,6 @@ function Recipe({ navigation, route }) {
         {
           text: 'OK',
           onPress: () => {
-            console.log('delete');
             deleteRecipe(route.params.data.id);
             Alert.alert('Deleted!', 'Your recipe has been deleted');
             navigation.goBack();
